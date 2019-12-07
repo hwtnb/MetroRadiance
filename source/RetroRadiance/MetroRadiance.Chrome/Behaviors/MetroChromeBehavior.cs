@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interactivity;
 using System.Windows.Media;
 using MetroRadiance.Chrome.Internal;
+using Microsoft.Xaml.Behaviors;
 
 namespace MetroRadiance.Chrome.Behaviors
 {

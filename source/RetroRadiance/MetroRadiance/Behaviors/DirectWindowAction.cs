@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Interactivity;
 using MetroRadiance.Controls;
 using MetroRadiance.Internal;
+using Microsoft.Xaml.Behaviors;
 
 namespace MetroRadiance.Behaviors
 {
