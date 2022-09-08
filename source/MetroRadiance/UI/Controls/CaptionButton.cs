@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
+using MetroRadiance.Interop.Win32;
 using MetroRadiance.Utilities;
 
 namespace MetroRadiance.UI.Controls
@@ -13,8 +15,12 @@ namespace MetroRadiance.UI.Controls
 	/// </summary>
 	public class CaptionButton : Button
 	{
+		internal protected static bool IsWindows11 { get; }
+
 		static CaptionButton()
 		{
+			IsWindows11 = Environment.OSVersion.Version.Build >= 22000;
+
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(CaptionButton), new FrameworkPropertyMetadata(typeof(CaptionButton)));
 		}
 
@@ -59,6 +65,18 @@ namespace MetroRadiance.UI.Controls
 
 		#endregion
 
+		#region IsSnapLayoutsEnabled 依存関係プロパティ
+
+		public bool IsSnapLayoutsEnabled
+		{
+			get { return (bool)this.GetValue(IsSnapLayoutsEnabledPropertyKey.DependencyProperty); }
+			private set { this.SetValue(IsSnapLayoutsEnabledPropertyKey, value); }
+		}
+		private static readonly DependencyPropertyKey IsSnapLayoutsEnabledPropertyKey =
+			DependencyProperty.RegisterReadOnly("IsSnapLayoutsEnabled", typeof(bool), typeof(CaptionButton), new UIPropertyMetadata(false));
+
+		#endregion
+
 		protected override void OnInitialized(EventArgs e)
 		{
 			base.OnInitialized(e);
@@ -68,6 +86,17 @@ namespace MetroRadiance.UI.Controls
 			{
 				this.owner.StateChanged += (sender, args) => this.ChangeVisibility();
 				this.ChangeVisibility();
+
+				if (IsWindows11)
+				{
+					this.owner.Loaded += (sender, args) =>
+					{
+						var source = PresentationSource.FromVisual(this.owner) as HwndSource;
+						if (source == null) return;
+						source.AddHook(this.WndProc);
+						this.owner.Closed += (object s, EventArgs a) => source.RemoveHook(this.WndProc);
+					};
+				}
 			}
 		}
 
@@ -94,6 +123,56 @@ namespace MetroRadiance.UI.Controls
 					this.Visibility = this.owner.WindowState != WindowState.Normal ? Visibility.Visible : Visibility.Collapsed;
 					break;
 			}
+		}
+
+		private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+		{
+			if ((this.WindowAction != WindowAction.Maximize && this.WindowAction != WindowAction.Normalize)
+				|| this.owner.ResizeMode < ResizeMode.CanResize
+				|| this.owner.WindowState == WindowState.Minimized)
+			{
+				return IntPtr.Zero;
+			}
+
+			if (msg == (int)WindowsMessages.WM_NCLBUTTONDOWN)
+			{
+				if (this.Hits(lParam.ToPoint()))
+				{
+					this.IsPressed = true;
+					handled = true;
+				}
+			}
+			else if (msg == (int)WindowsMessages.WM_NCLBUTTONUP)
+			{
+				if (this.Hits(lParam.ToPoint()))
+				{
+					this.OnClick();
+				}
+				this.IsPressed = false;
+			}
+			else if (msg == (int)WindowsMessages.WM_NCHITTEST)
+			{
+				if (this.Hits(lParam.ToPoint()))
+				{
+					this.IsSnapLayoutsEnabled = true;
+					handled = true;
+					return (IntPtr)HitTestValues.HTMAXBUTTON;
+				}
+				else if (this.IsSnapLayoutsEnabled)
+				{
+					this.IsPressed = false;
+					this.IsSnapLayoutsEnabled = false;
+				}
+			}
+
+			return IntPtr.Zero;
+		}
+
+		private bool Hits(Point ptScreen)
+		{
+			var ptClient = this.PointFromScreen(ptScreen);
+			var rectTarget = new Rect(0, 0, this.ActualWidth, this.ActualHeight);
+			return rectTarget.Contains(ptClient);
 		}
 	}
 }
