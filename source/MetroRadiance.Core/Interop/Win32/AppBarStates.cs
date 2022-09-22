@@ -8,12 +8,12 @@ namespace MetroRadiance.Interop.Win32
 	{
 		/// <summary>
 		/// The taskbar is in the autohide state.
-		/// <summary>
+		/// </summary>
 		ABS_AUTOHIDE = 0x1,
 
 		/// <summary>
 		/// he taskbar is in the always-on-top state.
-		/// <summary>
+		/// </summary>
 		ABS_ALWAYSONTOP = 0x2
 	}
 }

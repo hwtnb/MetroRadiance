@@ -27,6 +27,7 @@ namespace MetroRadiance.Platform
 		/// <summary>
 		/// テーマ設定が変更されたときに通知を受け取るメソッドを登録します。
 		/// </summary>
+		/// <param name="that">テーマ設定値。</param>
 		/// <param name="callback">テーマ設定が変更されたときに通知を受け取るメソッド。</param>
 		/// <returns>通知の購読を解除するときに使用する <see cref="IDisposable"/> オブジェクト。</returns>
 		[EditorBrowsable(EditorBrowsableState.Never)]
