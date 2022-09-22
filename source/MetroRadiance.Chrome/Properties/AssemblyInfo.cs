@@ -3,6 +3,10 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Markup;
 
+#if NET5_0_OR_GREATER
+using System.Runtime.Versioning;
+#endif
+
 [assembly: AssemblyTitle("MetroRadiance.Chrome")]
 [assembly: AssemblyCompany("grabacr.net")]
 [assembly: AssemblyProduct("MetroRadiance")]
@@ -20,3 +24,8 @@ using System.Windows.Markup;
 
 [assembly: AssemblyVersion("2.2.0")]
 [assembly: AssemblyInformationalVersion("2.2.0")]
+
+#if NET5_0_OR_GREATER
+[assembly: TargetPlatform("windows7.0")]
+[assembly: SupportedOSPlatform("windows7.0")]
+#endif

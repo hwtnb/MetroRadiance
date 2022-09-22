@@ -4,6 +4,10 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
+#if NET5_0_OR_GREATER
+using System.Runtime.Versioning;
+#endif
+
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
@@ -53,3 +57,8 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+#if NET5_0_OR_GREATER
+[assembly: TargetPlatform("windows7.0")]
+[assembly: SupportedOSPlatform("windows7.0")]
+#endif
