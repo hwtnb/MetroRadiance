@@ -13,5 +13,7 @@ namespace MetroRadiance.Interop.Win32
 		[DllImport("Dwmapi.dll", ExactSpelling = true, PreserveSig = false)]
 		public static extern void DwmGetWindowAttribute(IntPtr hWnd, DWMWINDOWATTRIBUTE dwAttribute, [Out] out RECT pvAttribute, int cbAttribute);
 
+		[DllImport("Dwmapi.dll", ExactSpelling = true, CharSet = CharSet.Unicode, PreserveSig = false)]
+		public static extern void DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, ref DWM_WINDOW_CORNER_PREFERENCE pvAttribute, uint cbAttribute);
 	}
 }

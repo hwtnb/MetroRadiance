@@ -101,6 +101,31 @@ namespace MetroRadiance.UI.Controls
 
 		#endregion
 
+		#region CornerMode 依存関係プロパティ
+
+		public BlurWindowCornerMode CornerMode
+		{
+			get { return (BlurWindowCornerMode)this.GetValue(CornerModeProperty); }
+			set { this.SetValue(CornerModeProperty, value); }
+		}
+		public static readonly DependencyProperty CornerModeProperty =
+			DependencyProperty.Register("CornerMode", typeof(BlurWindowCornerMode), typeof(BlurWindow), new UIPropertyMetadata(BlurWindowCornerMode.Default, CornerModeChangedCallback));
+
+		private static void CornerModeChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			var instance = (BlurWindow)d;
+			var cornerMode = instance.CornerMode;
+			var attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
+			var preference = (DWM_WINDOW_CORNER_PREFERENCE)cornerMode;
+			Dwmapi.DwmSetWindowAttribute(instance._source.Handle, attribute, ref preference, sizeof(uint));
+		}
+
+		protected virtual void OnCornerModeChanged(DependencyPropertyChangedEventArgs e)
+		{
+		}
+
+		#endregion
+
 		protected override void OnSourceInitialized(EventArgs e)
 		{
 			base.OnSourceInitialized(e);
@@ -119,6 +144,8 @@ namespace MetroRadiance.UI.Controls
 			var wndStyle = User32.GetWindowLong(hWnd);
 			if (!IsWindows10) wndStyle |= WindowStyles.WS_SIZEFRAME;
 			User32.SetWindowLong(hWnd, wndStyle & ~WindowStyles.WS_SYSMENU);
+
+			this.CornerMode = BlurWindowCornerMode.Default;
 		}
 
 		protected override void OnClosed(EventArgs e)

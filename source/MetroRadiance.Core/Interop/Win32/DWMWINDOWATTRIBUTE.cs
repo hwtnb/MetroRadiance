@@ -19,6 +19,15 @@ namespace MetroRadiance.Interop.Win32
 		DWMWA_CLOAK,                        // [set] Cloak or uncloak the window
 		DWMWA_CLOAKED,                      // [get] Gets the cloaked state of the window
 		DWMWA_FREEZE_REPRESENTATION,        // [set] Force this window to freeze the thumbnail without live update
+		DWMWA_PASSIVE_UPDATE_MODE,
+		DWMWA_USE_HOSTBACKDROPBRUSH,
+		DWMWA_USE_IMMERSIVE_DARK_MODE = 20,
+		DWMWA_WINDOW_CORNER_PREFERENCE = 33,
+		DWMWA_BORDER_COLOR,
+		DWMWA_CAPTION_COLOR,
+		DWMWA_TEXT_COLOR,
+		DWMWA_VISIBLE_FRAME_BORDER_THICKNESS,
+		DWMWA_SYSTEMBACKDROP_TYPE,
 		DWMWA_LAST
 	};
 }
