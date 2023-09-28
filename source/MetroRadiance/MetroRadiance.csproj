@@ -50,13 +50,19 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="System.ServiceModel.Duplex" Version="4.10.0" />
-    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.10.0" />
-    <PackageReference Include="System.ServiceModel.Federation" Version="4.10.0" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="6.0.0" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="6.0.0" />
+    <PackageReference Include="System.ServiceModel.Federation" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' != 'net472' And '$(TargetFramework)' != 'net48' ">
-    <PackageReference Include="Tavis.UriTemplates" Version="1.1.1" />
+    <PackageReference Include="Tavis.UriTemplates" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' Or '$(TargetFramework)' == 'net48' ">
+    <PackageReference Update="System.ServiceModel.Duplex" Version="4.10.2" />
+    <PackageReference Update="System.ServiceModel.NetTcp" Version="4.10.2" />
+    <PackageReference Update="System.ServiceModel.Federation" Version="4.10.2" />
   </ItemGroup>
 
 </Project>
