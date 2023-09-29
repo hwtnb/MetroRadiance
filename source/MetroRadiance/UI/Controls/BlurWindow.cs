@@ -15,9 +15,12 @@ namespace MetroRadiance.UI.Controls
 	{
 		internal protected static bool IsWindows10 { get; }
 
+		internal protected static bool IsWindows11 { get; }
+
 		static BlurWindow()
 		{
 			IsWindows10 = Environment.OSVersion.Version.Major == 10;
+			IsWindows11 = IsWindows10 && Environment.OSVersion.Version.Build >= 22000;
 
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(BlurWindow), new FrameworkPropertyMetadata(typeof(BlurWindow)));
 			ResizeModeProperty.OverrideMetadata(typeof(BlurWindow), new FrameworkPropertyMetadata(ResizeMode.CanMinimize));
@@ -113,6 +116,7 @@ namespace MetroRadiance.UI.Controls
 
 		private static void CornerModeChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
+			if (!IsWindows11) return;
 			var instance = (BlurWindow)d;
 			var cornerMode = instance.CornerMode;
 			var attribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
